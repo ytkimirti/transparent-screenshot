@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const puppeteer = require("puppeteer");
+const fs = require("fs");
 // const argv = require("yargs").argv;
 
 // require("yargs") // eslint-disable-line
@@ -72,26 +73,27 @@ async function takeScreenshot(url, image) {
     fullPage: true,
   });
 
-  console.log("screenshot done");
+  console.log(`screenshot of ${url} done`);
 
   await browser.close();
 }
 
-const url = process.argv[2];
+const first = process.argv[2];
 
-console.log("url: " + url);
+let urlsToScan = [];
 
-if (!url) {
-  console.error(`Usage: screenshot [url] [image]`);
-  process.exit(1);
+if (first.endsWith(".txt")) {
+  urlsToScan = fs.readFileSync(first).toString().split("\n");
+} else {
+  urlsToScan.push(first);
 }
 
-let img = process.argv[3];
+for (const url of urlsToScan) {
+  console.log("url: " + url);
 
-if (!img) {
   // Current date
-  img = new Date().toISOString().replace(/:/g, "-") + ".png";
-  img = "img_" + img;
-}
+  const date = new Date().toISOString().replace(/:/g, "-") + ".png";
+  const img = "img_" + date;
 
-takeScreenshot(url, img);
+  takeScreenshot(url, img);
+}
