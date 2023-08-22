@@ -11,7 +11,6 @@ async function takeScreenshot(url, image) {
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
       "--single-process",
-
       "--ignore-certificate-errors",
     ],
     //pipe: true,
